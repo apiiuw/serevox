@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-serevox-app
+  labels:
+    app: serevox-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: serevox-app
+  template:
+    metadata:
+      labels:
+        app: serevox-app
+    spec:
+      containers:
+        - name: serevox-app
+          image: {{ .Values.services.serevox-app.image }}
+          ports:
+            - containerPort: {{ .Values.services.serevox-app.port }}
+          env:
+            - name: SEREVOX_PORT
+              value: {{ .Values.services.serevox-app.port | quote }}
+            - name: SEREVOX_DATA_DIR
+              value: {{ .Values.env.SEREVOX_DATA_DIR | quote }}
+            - name: MIDTRANS_IS_PROD
+              value: {{ .Values.env.MIDTRANS_IS_PROD | quote }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: uploads
+              mountPath: /app/uploads
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-serevox-db-data
+        - name: uploads
+          emptyDir: {}

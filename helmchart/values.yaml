@@ -1,0 +1,19 @@
+global:
+  ingress:
+    enabled: false
+    host: serevox.local
+    tlsSecret: serevox-tls
+
+services:
+  serevox-app:
+    image: serevox-serevox-app:latest
+    port: 80
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+env:
+  SEREVOX_PORT: "80"
+  SEREVOX_DATA_DIR: "/data"
+  MIDTRANS_IS_PROD: "false"

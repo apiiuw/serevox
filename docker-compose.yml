@@ -1,0 +1,27 @@
+services:
+  serevox-app:
+    build: .
+    image: serevox-serevox-app
+    container_name: serevox-app
+    restart: always
+    expose:
+      - "80"
+    environment:
+      SEREVOX_PORT: "80"
+      SEREVOX_PUBLIC_URL: "http://serevox-app"
+      SEREVOX_DATA_DIR: "/data"
+      MIDTRANS_SERVER_KEY: "SB-Mid-server-5y5ZIlFc5yMRtomK4U5l05Hx"
+      MIDTRANS_CLIENT_KEY: "SB-Mid-client-axI.ER5L_Xy~RQYdmtuvTAxC"
+      MIDTRANS_IS_PROD: "false"
+    volumes:
+      - serevox_db_data:/data
+      - /project/autodev-py/data_sharing/serevox:/app/uploads
+    networks:
+      - autodev-net
+
+networks:
+  autodev-net:
+    external: true
+
+volumes:
+  serevox_db_data:
